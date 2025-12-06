@@ -39,6 +39,13 @@ class Configuration(object):
     """Версия модуля."""
     verify = None
     """Проверка сертификата (bool)."""
+    connect_timeout = None
+    """Время ожидания подключения (int)."""
+    read_timeout = None
+    """Время ожидания ответа (int)."""
+    proxies = None
+    """Прокси-серверы (dict типа {"http": http_proxy, "https": https_proxy})."""
+
 
     def __init__(self, **kwargs):
         self.assert_has_api_credentials()
@@ -61,6 +68,9 @@ class Configuration(object):
         Configuration.timeout = kwargs.get("timeout", 1800)
         Configuration.max_attempts = kwargs.get("max_attempts", 3)
         Configuration.verify = kwargs.get("verify", None)
+        Configuration.connect_timeout = kwargs.get("connect_timeout", None)
+        Configuration.read_timeout = kwargs.get("read_timeout", None)
+        Configuration.proxies = kwargs.get("proxies", None)
 
     @staticmethod
     def configure_auth_token(token, logger=None, **kwargs):
@@ -79,6 +89,9 @@ class Configuration(object):
         Configuration.timeout = kwargs.get("timeout", 1800)
         Configuration.max_attempts = kwargs.get("max_attempts", 3)
         Configuration.verify = kwargs.get("verify", None)
+        Configuration.connect_timeout = kwargs.get("connect_timeout", None)
+        Configuration.read_timeout = kwargs.get("read_timeout", None)
+        Configuration.proxies = kwargs.get("proxies", None)
 
     @staticmethod
     def configure_logger(logger):
@@ -124,7 +137,10 @@ class Configuration(object):
             agent_module=Configuration.agent_module,
             logger=Configuration.logger,
             api_url=Configuration.api_url,
-            verify=Configuration.verify
+            verify=Configuration.verify,
+            connect_timeout=Configuration.connect_timeout,
+            read_timeout=Configuration.read_timeout,
+            proxies=Configuration.proxies,
         )
 
     @staticmethod

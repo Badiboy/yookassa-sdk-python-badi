@@ -74,13 +74,24 @@ class ApiClient:
         session = self.get_session()
         self.log_request(body, method, path, query_params, request_headers)
 
+        if self.configuration.connect_timeout and self.configuration.read_timeout:
+            timeout = (self.configuration.connect_timeout, self.configuration.read_timeout)
+        elif self.configuration.connect_timeout:
+            timeout = (self.configuration.connect_timeout, self.configuration.connect_timeout)
+        elif self.configuration.read_timeout:
+            timeout = (self.configuration.read_timeout, self.configuration.read_timeout)
+        else:
+            timeout = None
+
         raw_response = session.request(
             method,
             self.endpoint + path,
             params=query_params,
             headers=request_headers,
             json=body,
-            verify=self.configuration.verify
+            verify=self.configuration.verify,
+            timeout=timeout,
+            proxies=self.configuration.proxies,
         )
 
         session.close()
